@@ -6,10 +6,19 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <h2>Search Product by Name</h2>
+  <img src="/home/ojas/Desktop/5D/task2/bg.png" alt="img">
+  <div class = "logo">
+    <h2>Search Product by Name</h2>
+  </div>
+  
   <input type="text" id="searchInput" placeholder="Enter product name">
   <button onclick="searchProduct()">Search</button>
+  <select id="sortSelect">
+    <option value="default">Sort by Price</option>
+    <option value="lowToHigh">Low to High</option>
+    <option value="highToLow">High to Low</option>
+  </select>
+  
   <div id="error" class="error"></div>
   <div id="products" class="product_container"></div>
 

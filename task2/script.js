@@ -1,5 +1,8 @@
 const errorDiv = document.getElementById("error");
 const container = document.getElementById("products");
+const sortSelect = document.getElementById("sortSelect");
+
+let allProducts = [];
 
 window.onload = () => {
   fetchAllProducts();
@@ -9,36 +12,45 @@ async function fetchAllProducts() {
   try {
     const res = await fetch("https://dummyjson.com/products");
     const data = await res.json();
-    displayProducts(data.products);
+    allProducts = data.products;
+    displayProducts(allProducts);
   } catch (err) {
-    errorDiv.textContent = "Failed to load products.";
+    errorDiv.textContent = "failed to load products.";
   }
 }
 
 async function searchProduct() {
   const input = document.getElementById("searchInput").value.trim();
-
   errorDiv.textContent = "";
   container.innerHTML = "";
 
   if (input === "") {
-    errorDiv.textContent = "please enter a product name";
+    errorDiv.textContent = "Please enter a product name";
+    fetchAllProducts();
     return;
   }
 
   try {
     const res = await fetch(`https://dummyjson.com/products/search?q=${input}`);
     const data = await res.json();
-
-    if (data.products.length > 0) {
-      displayProducts(data.products);
-    } else {
-      container.innerHTML = "<p>No matching products found.</p>";
-    }
+    allProducts = data.products;
+    displayProducts(allProducts);
   } catch (err) {
     errorDiv.textContent = "Search failed.";
   }
 }
+
+sortSelect.addEventListener("change", () => {
+  let sortedProducts = [...allProducts];
+
+  if (sortSelect.value === "lowToHigh") {
+    sortedProducts.sort((a, b) => a.price - b.price);
+  } else if (sortSelect.value === "highToLow") {
+    sortedProducts.sort((a, b) => b.price - a.price);
+  }
+
+  displayProducts(sortedProducts);
+});
 
 function displayProducts(products) {
   container.innerHTML = "";
